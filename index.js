@@ -23,8 +23,20 @@ app.get("/carreras", (req, resp) => {
 
 //2. Servicio (endpoint) que nos devuelva una lista de cursos
 // path: "/cursos" metodo: GET
+// query parameter "/cursos?carrera=1"
 app.get("/cursos", (req, resp) => {
-    resp.send(data.cursos)
+    const carreraId = req.query.carrera
+
+    if (carreraId == undefined) {
+        resp.send(data.cursos)
+    }else {
+        const cursosFiltrados = data.cursos.filter((curso) => {
+            if (curso.carreraId == carreraId) return true
+            else return false
+        })
+        resp.send(cursosFiltrados)
+    }
+
 })
 
 
