@@ -12,6 +12,7 @@ app.use(bodyParser.urlencoded({
     extended : true
 }))
 app.use(cors()) // politica CORS (cualquier origen) <---- TODO: cuidado!!!
+app.use(express.static("assets")) // <-- configuracion de contenido estatico
 
 
 //1. Servicio que nos devuelva una lista de carreras
