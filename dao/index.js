@@ -21,3 +21,7 @@ const Carrera = sequelize.define("carrera", {
     timestamps : false,
     freezeTableName : true
 })
+
+module.exports = {
+    Carrera
+}

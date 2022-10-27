@@ -3,6 +3,7 @@ const bodyParser = require("body-parser")
 const cors = require("cors")
 
 const data = require("./test_data") // importamos data de test
+const { Carrera } = require("./dao")
 
 const PUERTO = 4444
 
@@ -17,8 +18,10 @@ app.use(express.static("assets")) // <-- configuracion de contenido estatico
 
 //1. Servicio que nos devuelva una lista de carreras
 // path: "/carreras" metodo: GET
-app.get("/carreras", (req, resp) => {
-    resp.send(data.carreras)
+app.get("/carreras", async (req, resp) => {
+    const listaCarreras = await Carrera.findAll()
+
+    resp.send(listaCarreras)
 })
 
 
