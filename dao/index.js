@@ -22,6 +22,36 @@ const Carrera = sequelize.define("carrera", {
     freezeTableName : true
 })
 
+const Curso = sequelize.define("curso", {
+    id : {
+        primaryKey : true,
+        type : DataTypes.UUID,
+        defaultValue : Sequelize.UUIDV4
+    },
+    nombre : {
+        type : DataTypes.STRING(150),
+        allowNull : false
+    },
+    carrera_id : {
+        type : DataTypes.UUID,
+        allowNull : true
+    }
+}, {
+    timestamps : false,
+    freezeTableName : true
+})
+
+// Relaciones
+// Curso * <----> 1 Carrera
+Curso.belongsTo(Carrera, {
+    foreignKey : "carrera_id"
+})
+Carrera.hasMany(Curso, {
+    foreignKey : "id"
+})
+
+
+
 module.exports = {
-    Carrera
+    Carrera, Curso
 }
