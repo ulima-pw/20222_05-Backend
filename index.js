@@ -31,15 +31,16 @@ app.get("/carreras", async (req, resp) => {
 app.get("/cursos", async (req, resp) => {
     const carreraId = req.query.carrera
 
-    if (carreraId == undefined) {
+    if (carreraId == undefined || carreraId === "-1") {
 
         const listaCursos = await Curso.findAll()
 
         resp.send(listaCursos)
     }else {
-        const cursosFiltrados = data.cursos.filter((curso) => {
-            if (curso.carreraId == carreraId) return true
-            else return false
+        const cursosFiltrados = await Curso.findAll({
+            where : {
+                carrera_id : carreraId
+            }
         })
         resp.send(cursosFiltrados)
     }
