@@ -110,5 +110,5 @@ Ciclo.hasMany(Evaluacion, {
 })
 
 module.exports = {
-    Carrera, Curso
+    Carrera, Curso, Ciclo, Evaluacion
 }

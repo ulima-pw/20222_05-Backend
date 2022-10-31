@@ -3,7 +3,7 @@ const bodyParser = require("body-parser")
 const cors = require("cors")
 
 const data = require("./test_data") // importamos data de test
-const { Carrera, Curso } = require("./dao")
+const { Carrera, Curso, Ciclo, Evaluacion } = require("./dao")
 
 const PUERTO = 4444
 
@@ -47,6 +47,38 @@ app.get("/cursos", async (req, resp) => {
 
 })
 
+// 3. Endpoint para listar ciclos
+app.get("/ciclos", async (req, resp) => {
+    const listadoCiclos = await Ciclo.findAll()
+    resp.send(listadoCiclos)
+})
+
+// 4. Endpoint para listar evaluaciones
+// path: "/evaluaciones" metodo: GET
+// query parameter "/evaluaciones?curso=12312&ciclo=23523532"
+app.get("/evaluacion", async (req, resp) => {
+    const cursoId = req.query.curso
+    const cicloId = req.query.ciclo
+
+    if (cicloId == undefined || cicloId === "-1"){
+        // Caso que no se seleccione ciclo
+        const listadoEvaluaciones = await Evaluacion.findAll({
+            where : {
+                curso_id : cursoId
+            }
+        })
+        resp.send(listadoEvaluaciones)
+    }else {
+        // Caso que SI se seleccione ciclo
+        const listadoEvaluaciones = await Evaluacion.findAll({
+            where : {
+                curso_id : cursoId,
+                ciclo_id : cicloId
+            }
+        })
+        resp.send(listadoEvaluaciones)
+    }
+})
 
 app.listen(PUERTO, () => {
     console.log(`Servidor web iniciado en puerto ${PUERTO}`)
