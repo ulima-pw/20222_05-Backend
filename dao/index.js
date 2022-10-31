@@ -63,6 +63,9 @@ const Evaluacion = sequelize.define("evaluacion", {
         type : DataTypes.UUID,
         allowNull : false
     }
+}, {
+    timestamps : false,
+    freezeTableName : true
 })
 
 const Ciclo = sequelize.define("ciclo", {
@@ -75,6 +78,9 @@ const Ciclo = sequelize.define("ciclo", {
         type : DataTypes.STRING(200),
         allowNull : false
     }
+}, {
+    timestamps : false,
+    freezeTableName : true
 })
 
 
