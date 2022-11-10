@@ -83,6 +83,54 @@ const Ciclo = sequelize.define("ciclo", {
     freezeTableName : true
 })
 
+const Estudiante = sequelize.define("estudiante", {
+    id : {
+        primaryKey : true,
+        type : DataTypes.UUID,
+        defaultValue : Sequelize.UUIDV4
+    },
+    username : {
+        type : DataTypes.STRING(20),
+        allowNull : false
+    },
+    password : {
+        type : DataTypes.STRING(100),
+        allowNull : false
+    }
+}, {
+    timestamps : false,
+    freezeTableName : true
+})
+
+const Resolucion = sequelize.define("resolucion", {
+    id : {
+        primaryKey : true,
+        type : DataTypes.UUID,
+        defaultValue : Sequelize.UUIDV4
+    },
+    estudiante_id : {
+        type : DataTypes.UUID,
+        allowNull : false        
+    },
+    evaluacion_id : {
+        type : DataTypes.UUID,
+        allowNull : false
+    },
+    fecha_envio : {
+        type : DataTypes.DATE,
+        allowNull : false
+    },
+    upvote : {
+        type : DataTypes.INTEGER
+    },
+    url : {
+        type : DataTypes.STRING(2048)
+    }
+}, {
+    timestamps : false,
+    freezeTableName : true
+})
+
 
 // Relaciones
 // Curso * <----> 1 Carrera
@@ -109,6 +157,23 @@ Ciclo.hasMany(Evaluacion, {
     foreignKey : "id"
 })
 
+// Resolucion * <----> 1 Estudiante
+Resolucion.belongsTo(Estudiante, {
+    foreignKey : "estudiante_id"
+})
+Estudiante.hasMany(Resolucion, {
+    foreignKey : "id"
+})
+
+// Resolucion * <----> 1 Evaluacion
+Resolucion.belongsTo(Evaluacion, {
+    foreignKey : "evaluacion_id"
+})
+Evaluacion.hasMany(Resolucion, {
+    foreignKey : "id"
+})
+
+
 module.exports = {
-    Carrera, Curso, Ciclo, Evaluacion
+    Carrera, Curso, Ciclo, Evaluacion, Estudiante, Resolucion
 }
