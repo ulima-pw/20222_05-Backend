@@ -80,6 +80,18 @@ app.get("/evaluacion", async (req, resp) => {
     }
 })
 
+// 5: Registro de resolucion de evaluacion
+// Recibir la data en el Cuerpo peticion HTTP (POST)
+// Request:
+// {
+//      estudiante_id : "22344523532",
+//      evaluacion_id : "22344523532",
+//      url : "http://blablac.com/archivo.zip",
+// }
+app.post("/resolucion", (req, resp) => {
+    
+})
+
 app.listen(PUERTO, () => {
     console.log(`Servidor web iniciado en puerto ${PUERTO}`)
 })
