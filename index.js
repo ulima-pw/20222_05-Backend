@@ -3,9 +3,10 @@ const bodyParser = require("body-parser")
 const cors = require("cors")
 
 const data = require("./test_data") // importamos data de test
-const { Carrera, Curso, Ciclo, Evaluacion } = require("./dao")
+const { Carrera, Curso, Ciclo, Evaluacion, Resolucion } = require("./dao")
+const { response } = require("express")
 
-const PUERTO = 4444
+const PUERTO = process.env.PORT || 4444
 
 const app = express()
 app.use(bodyParser.json())
@@ -88,8 +89,59 @@ app.get("/evaluacion", async (req, resp) => {
 //      evaluacion_id : "22344523532",
 //      url : "http://blablac.com/archivo.zip",
 // }
-app.post("/resolucion", (req, resp) => {
-    
+app.post("/resolucion", async (req, resp) => {
+    const dataRequest = req.body
+    const estudianteId = dataRequest.estudiante_id
+    const evaluacionId = dataRequest.evaluacion_id
+    const url = dataRequest.url
+
+    // Validaciones
+    if (estudianteId == null || estudianteId == undefined) resp.send({
+        error : "ERROR. Debe enviar un estudiante_id"
+    })
+
+    if (evaluacionId == null || evaluacionId == undefined) resp.send({
+        error : "ERROR. Debe enviar un evaluacion_id"
+    })
+
+    if (url == null || url == undefined) resp.send({
+        error : "ERROR. Debe enviar un url"
+    })
+
+    // Verificacion si ya existe un envio
+    const resoluciones = await Resolucion.findAll({
+        estudiante_id : estudianteId,
+        evaluacion_id : evaluacionId
+    })
+
+    if (resoluciones.length > 0) {
+        resp.send({
+            error : "ERROR. Ya existe una resolucion para el estudiante_id y la evaluacion_id"
+        })
+        return
+    }
+
+
+
+    try {
+        await Resolucion.create({
+            estudiante_id : estudianteId,
+            evaluacion_id : evaluacionId,
+            url : url,
+            fecha_envio : new Date().toJSON(),
+            upvote : 0
+        })
+    } catch (error) {
+        resp.send({
+            error : `ERROR. ${error}`
+        })
+        return
+    }
+
+    resp.send({
+        error : ""
+    })
+
 })
 
 app.listen(PUERTO, () => {
